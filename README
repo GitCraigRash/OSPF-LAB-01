@@ -11,6 +11,7 @@ Goal:
 3. Set Router-ids
 	R1 to 1.1.1.1
 	etc.
+	NOTE that if the router already has active Neighbors, the new Router ID will NOT take effect. It will need to have the OSPF process cleared, which shuts down the network and must restart it. This is very bad on live production networks. 
 4. Configure all Routers to be OSPF neighbors and advertising their routes.
 5. Configure LAN-facing interfaces passive. 
 6. Adjust OSPF interface cost to favor the path though R1.
