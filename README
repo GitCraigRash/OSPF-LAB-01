@@ -1,8 +1,16 @@
 Welcome to OSPF lesson 101
 Goal:
-- Configure all Routers to be OSPF neighbors and advertising their routes.
-- Configure LAN-facing  interfaces passive. 
-- Adjust OSPF interface cost to favor the path though R1.
+1. Add hostnames: 
+	R1 to R1
+	R2 to R2 
+	R3 to R3
+2. Add loopback interfaces such that:
+	R1 is 1.1.1.1 /32 
+	R2 is 2.2.2.2 /32
+	R3 is 3.3.3.3 /32
+3. Configure all Routers to be OSPF neighbors and advertising their routes.
+4. Configure LAN-facing interfaces passive. 
+5. Adjust OSPF interface cost to favor the path though R1.
 
 
 - Experiment: Change the hello timer on one router and observe where adjacency breaks.
@@ -12,30 +20,45 @@ Device	| IP address	| Subnet	|
 R1 	| G0/0/0 = 10.1.2.1 	| 255.255.255.0; 
 R1 	| G0/0/1 = 10.1.4.2 	| 255.255.255.0
 R1 	| G0/0/2 = 192.168.1.254	| 255.255.255.0
-R1 	| Loopback0 = 1.1.1.1 	| 0.0.0.0
 
 R2 	| G0/0/0 = 10.1.2.2 /24; 
 R2 	| G0/0/1 = 10.1.3.1 /24; 
 R2 	| G0/0/2 = 192.168.2.254 /24; 
-R2 	| Loopback0 = 2.2.2.2;
 
 R3 	| G0/0/0 = 10.1.3.2 	| 255.255.255.0; 
 R3 	| G0/0/1 = 10.1.4.1 	| 255.255.255.0; 
 R3 	| G0/0/2 = 192.168.3.254 	| 255.255.255.0; 
-R3 	| Loopback0 = 3.3.3.3	| 0.0.0.0
 
 PC1 	| F0/0 192.168.1.1 	| 255.255.255.0; 	| DG = Not Set
 PC2 	| F0/0 192.168.2.1 	| 255.255.255.0; 	| DG = Not Set
 PC3 	| F0/0 192.168.3.1 	| 255.255.255.0; 	| DG = Not Set
 
+Steps to complete
+1. Use hostname command to change hostname of device
+  - Router#(config) hostname R1
+2. Use interface command to implicity create the loopback interface. Give them addresses based on the number of the router. 
+  - R1#(config)interface Loopback1  
+  - R1#(config-int) ip address 1.1.1.1 255.255.255.255
+3. Enable OSPF process 1 on all router interface facing other routes(modern per-interface method).
+  - R1#(config) interface GigabitEthernet0/0/0
+  - R1#(config-int) ip ospf 1
+4. Set passive-interface on router interfacing facing LANs. 
+  - R1#(config) router ospf 1
+  - R1#config-router) passive-interface GigabitEthernet0/0/1
 
-Enable OSPF process 1 on all router interface facing other routes(modern per-interface method).
-Set passive-interface on router interfacing facing LANs. 
 Adjust link cost so that traffic preffers to be routed though R1.
   Either 
     Raise R2 and R3 so that they are more expenseive.
+    - R2#(config) int G0/0/0
+    - R2#config-router) ip ospf cost 3000
+    - R3#(config) int G0/0/1
+    - R3#config-router) ip ospf cost 3000
   OR
     Reduce R1's links to R2 and R3 so that is cheaper. 
+    - R1#(config) int G0/0/0
+    - R1#config-router) ip ospf cost 1
+    - R1#(config) int G0/0/1
+    - R1#config-router) ip ospf cost 1
 
 Verify using show commands to verify neighbor configuration.
   Show ip ospf 1
@@ -47,3 +70,4 @@ What I learned
 that traceroute is a thing. 
 that topology maps entries require Designated Gateways if it is a PC/end device. 
 Passive-interface command prevents the transmission and reception of OSPF hello messages will still advertise the network. 
+
