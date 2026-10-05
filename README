@@ -1,0 +1,49 @@
+Welcome to OSPF lesson 101
+Goal:
+- Configure all Routers to be OSPF neighbors and advertising their routes.
+- Configure LAN-facing  interfaces passive. 
+- Adjust OSPF interface cost to favor the path though R1.
+
+
+- Experiment: Change the hello timer on one router and observe where adjacency breaks.
+
+Topology:
+Device	| IP address	| Subnet	| 
+R1 	| G0/0/0 = 10.1.2.1 	| 255.255.255.0; 
+R1 	| G0/0/1 = 10.1.4.2 	| 255.255.255.0
+R1 	| G0/0/2 = 192.168.1.254	| 255.255.255.0
+R1 	| Loopback0 = 1.1.1.1 	| 0.0.0.0
+
+R2 	| G0/0/0 = 10.1.2.2 /24; 
+R2 	| G0/0/1 = 10.1.3.1 /24; 
+R2 	| G0/0/2 = 192.168.2.254 /24; 
+R2 	| Loopback0 = 2.2.2.2;
+
+R3 	| G0/0/0 = 10.1.3.2 	| 255.255.255.0; 
+R3 	| G0/0/1 = 10.1.4.1 	| 255.255.255.0; 
+R3 	| G0/0/2 = 192.168.3.254 	| 255.255.255.0; 
+R3 	| Loopback0 = 3.3.3.3	| 0.0.0.0
+
+PC1 	| F0/0 192.168.1.1 	| 255.255.255.0; 	| DG = Not Set
+PC2 	| F0/0 192.168.2.1 	| 255.255.255.0; 	| DG = Not Set
+PC3 	| F0/0 192.168.3.1 	| 255.255.255.0; 	| DG = Not Set
+
+
+Enable OSPF process 1 on all router interface facing other routes(modern per-interface method).
+Set passive-interface on router interfacing facing LANs. 
+Adjust link cost so that traffic preffers to be routed though R1.
+  Either 
+    Raise R2 and R3 so that they are more expenseive.
+  OR
+    Reduce R1's links to R2 and R3 so that is cheaper. 
+
+Verify using show commands to verify neighbor configuration.
+  Show ip ospf 1
+  show ip ospf neighbors
+  show ip ospf database 
+Verify setup works by pinging or traceroute : PC1 to PC2, PC2 to PC3 and PC3 to PC1. 
+
+What I learned
+that traceroute is a thing. 
+that topology maps entries require Designated Gateways if it is a PC/end device. 
+Passive interfaces prevent 
