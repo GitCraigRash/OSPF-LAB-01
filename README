@@ -8,9 +8,12 @@ Goal:
 	R1 is 1.1.1.1 /32 
 	R2 is 2.2.2.2 /32
 	R3 is 3.3.3.3 /32
-3. Configure all Routers to be OSPF neighbors and advertising their routes.
-4. Configure LAN-facing interfaces passive. 
-5. Adjust OSPF interface cost to favor the path though R1.
+3. Set Router-ids
+	R1 to 1.1.1.1
+	etc.
+4. Configure all Routers to be OSPF neighbors and advertising their routes.
+5. Configure LAN-facing interfaces passive. 
+6. Adjust OSPF interface cost to favor the path though R1.
 
 
 - Experiment: Change the hello timer on one router and observe where adjacency breaks.
@@ -39,14 +42,16 @@ Steps to complete
 2. Use interface command to implicity create the loopback interface. Give them addresses based on the number of the router. 
   - R1#(config)interface Loopback1  
   - R1#(config-int) ip address 1.1.1.1 255.255.255.255
-3. Enable OSPF process 1 on all router interface facing other routes(modern per-interface method).
+3. Set router-ids according to their loopback interfaces
+  - R1#(config-router) router-id 1.1.1.1
+4. Enable OSPF process 1 on all router interface facing other routes(modern per-interface method).
   - R1#(config) interface GigabitEthernet0/0/0
   - R1#(config-int) ip ospf 1
-4. Set passive-interface on router interfacing facing LANs. 
+5. Set passive-interface on router interfacing facing LANs. 
   - R1#(config) router ospf 1
   - R1#config-router) passive-interface GigabitEthernet0/0/1
 
-Adjust link cost so that traffic preffers to be routed though R1.
+6. Adjust link cost so that traffic preffers to be routed though R1.
   Either 
     Raise R2 and R3 so that they are more expenseive.
     - R2#(config) int G0/0/0
