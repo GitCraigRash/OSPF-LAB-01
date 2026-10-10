@@ -1,4 +1,14 @@
 Welcome to OSPF lesson 101
+*** 
+Reminder on Packet tracer, if you get a message saying:
+Translating "_________"...domain server (255.255.255.255)
+You can escape with Shift+ Option + 6 on all major OS
+Eliminate this problem with: 
+enable
+configure terminal
+no ip domain-lookup
+***
+
 Goal:
 1. Add hostnames: 
 	R1 to R1
