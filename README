@@ -73,7 +73,7 @@ Verify using show commands to verify neighbor configuration.
 Verify setup works by pinging or traceroute : PC1 to PC2, PC2 to PC3 and PC3 to PC1. 
 
 What I learned
-that traceroute is a thing. 
+that traceroute is a helpful tool. 
 that topology maps entries require Designated Gateways if it is a PC/end device. 
 Passive-interface command prevents the transmission and reception of OSPF hello messages will still advertise the network. 
 
