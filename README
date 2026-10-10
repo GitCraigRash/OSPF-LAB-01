@@ -60,7 +60,7 @@ Steps to complete
     - R3#(config) int G0/0/1
     - R3#config-router) ip ospf cost 3000
   OR
-    Reduce R1's links to R2 and R3 so that is cheaper. 
+    Reduce R1's links to R2 and R3 so that they are cheaper. 
     - R1#(config) int G0/0/0
     - R1#config-router) ip ospf cost 1
     - R1#(config) int G0/0/1
