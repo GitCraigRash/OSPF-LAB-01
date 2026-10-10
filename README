@@ -26,9 +26,6 @@ Goal:
 5. Configure LAN-facing interfaces passive. 
 6. Adjust OSPF interface cost to favor the path though R1.
 
-
-- Experiment: Change the hello timer on one router and observe where adjacency breaks.
-
 Topology:
 Device	| IP address	| Subnet	| 
 R1 	| G0/0/0 = 10.1.2.1 	| 255.255.255.0; 
@@ -81,6 +78,22 @@ Verify using show commands to verify neighbor configuration.
   show ip ospf neighbors
   show ip ospf database 
 Verify setup works by pinging or traceroute : PC1 to PC2, PC2 to PC3 and PC3 to PC1. 
+
+
+- Experiment: Change the hello timer on one router and observe where adjacency breaks.
+Choose your favorite router, lets say R2. 
+enable 
+conf t
+interface G0/0/0
+ip ospf router hello-interval 9 ! Pick a number that is not 10
+do show ip ospf interface
+
+In a moment, the ospf state of R2 and R1 will become 2-way instead of full. 
+
+To fix, 
+ip ospf router hello-interval 10
+
+The ospf state of R2 and R1 will become full. 
 
 What I learned
 that traceroute is a helpful tool. 
